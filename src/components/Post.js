@@ -21,7 +21,7 @@ class Post extends Component {
       title: props.title,
       body: props.body,
       starCount: props.starCount,
-      private: 0
+      privacy: 0
     };
   }
 

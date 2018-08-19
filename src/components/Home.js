@@ -30,25 +30,27 @@ class Home extends Component {
   render() {
     var result = [];
     if (this.state.posts) {
+    
       for (let key in this.state.posts) {
-        let post = this.state.posts[key];
-
-        result.push(<Post
-          key={key}
-          classes={this.classes}
-          author={post.author}
-          authorPic={post.authorPic}
-          title={post.title}
-          body={post.body}
-          starCount={post.starCount}
-          privacy={post.privacy}
-        />);
+        let post = this.state.posts[key]
+        //if (post.uid == firebase.auth().currentUser.uid) {
+          result.push(<Post
+            key={key}
+            classes={this.classes}
+            author={post.author}
+            authorPic={post.authorPic}
+            title={post.title}
+            body={post.body}
+            starCount={post.starCount}
+            privacy={post.privacy}
+          />);
+        //}
+        }  
+         
+        return result;
+          
       }
-
-      return result;
-
-
-    }
+    
   }
 
   setUser(user) {

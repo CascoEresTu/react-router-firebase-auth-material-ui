@@ -5,6 +5,7 @@ import { Route, BrowserRouter, Link, Redirect, Switch } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
 import Home from './Home';
+import Profile from './Profile';
 import Dashboard from './protected/Dashboard';
 import { logout } from '../helpers/auth';
 import { firebaseAuth } from '../config/constants';
@@ -118,6 +119,10 @@ class App extends Component {
         <Link to="/dashboard">
           <Button  style={{ color: '#fff' }} >Dashboard</Button>
         </Link>
+        <Link to="/Profile" color="inherit">
+          <Button style={{ color: '#fff' }}>Profile</Button>
+        </Link>
+        
         {authButtons}
       </div>
     );
@@ -144,6 +149,7 @@ class App extends Component {
               <div >
                 <Switch>
                   <Route path="/" exact component={Home} />
+                  
                   <PublicRoute
                     authed={this.state.authed}
                     path="/login"
@@ -159,6 +165,7 @@ class App extends Component {
                     path="/dashboard"
                     component={Dashboard}
                   />
+                  <Route path="/Profile" exact component={Profile} />
                   <Route render={() => <h3>No aaaa Match</h3>} />
                 </Switch>
               </div>
