@@ -1,18 +1,16 @@
 import firebase from 'firebase';
-
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 // Required for side-effects
 require('firebase/firestore');
 
-
 const config = {
-  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
-  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-  databaseURL: process.env.REACT_APP_DATABASE_URL,
-  projectId: process.env.REACT_APP_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID
+  apiKey: "AIzaSyBHP3YhzrciwiI_mQ9-80MTR87CSRlW8ME",
+  authDomain: "examenux-ee1d5.firebaseapp.com",
+  databaseURL: "https://examenux-ee1d5.firebaseio.com",
+  projectId: "examenux-ee1d5",
+  storageBucket: "examenux-ee1d5.appspot.com",
+  messagingSenderId: "320399450906"
 };
 
 firebase.initializeApp(config);
@@ -25,9 +23,11 @@ const uiConfig = {
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
   ],
-  
+
 };
 
+export default !firebase.apps.length ? firebase.initializeApp(config) : firebase.app();
 export const db = firebase.firestore();
 export const firebaseAuth = firebase.auth;
 export const firebaseUI = uiConfig;
+
