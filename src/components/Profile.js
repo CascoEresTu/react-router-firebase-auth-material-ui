@@ -30,7 +30,6 @@ class Profile extends Component {
     render() {
         var result = [];
         if (this.state.posts) {
-
             for (let key in this.state.posts) {
                 let post = this.state.posts[key]
                 if (post.uid == firebase.auth().currentUser.uid) {
@@ -50,6 +49,7 @@ class Profile extends Component {
             return result;
 
         }
+        else return result;
 
     }
 

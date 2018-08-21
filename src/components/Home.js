@@ -30,27 +30,33 @@ class Home extends Component {
   render() {
     var result = [];
     if (this.state.posts) {
-    
+
       for (let key in this.state.posts) {
         let post = this.state.posts[key]
-        //if (post.uid == firebase.auth().currentUser.uid) {
+        if (post.privacy == 0) {
           result.push(<Post
             key={key}
+            postid={key}
+            currentUser={this.state.currentUser}
             classes={this.classes}
+            privacy={post.privacy}
             author={post.author}
             authorPic={post.authorPic}
             title={post.title}
             body={post.body}
-            starCount={post.starCount}
-            privacy={post.privacy}
+            Likes={post.Likes}
           />);
-        //}
-        }  
-         
-        return result;
-          
+        }
       }
-    
+
+      return result;
+
+    }else{
+      return  (
+        <div>Be the first one to post on the dashboard!</div>
+      );
+    }
+
   }
 
   setUser(user) {

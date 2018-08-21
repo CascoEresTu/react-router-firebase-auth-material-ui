@@ -27,6 +27,7 @@ class Dashboard extends Component {
       privacy: 0
     };
   }
+  handleChange = event =>{this.setState({privacy: event.target.value})}
 
   handleSubmit(event) {
     event.preventDefault();
@@ -36,7 +37,7 @@ class Dashboard extends Component {
       author: this.state.currentUser.username,
       authorPic: this.state.currentUser.profile_picture,
       body: this.state.body,
-      starCount: 0,
+      Likes: {},
       title: this.state.title,
       uid: this.state.currentUser.uid,
       privacy: this.state.privacy
@@ -44,46 +45,70 @@ class Dashboard extends Component {
     };
 
     // post to posts and user-posts
-    firebase.database().ref('/posts').push(newPost).then((snap) => {
+    this.dbRefPosts.push(newPost).then((snap) => {
       const key = snap.key;
       const path = '/user-posts/' + this.state.currentUser.uid + '/' + key;
       firebase.database().ref(path).set(newPost);
     });
   };
 
-  handleChange = event =>{this.setState({privacy: event.target.value})}
 
   render() {
-
+      /*
+        Se crean radio botones para el tipo de post
+      
+      */
     return (
       <form onSubmit={this.handleSubmit.bind(this)} style={style.container}>
         <h3>NUEVO POST</h3>
-        <p>Titulo:</p>
+      
         <TextField
           hinttext="Post title"
           floatinglabeltext="Title"
           onChange={(event) => this.setState({ title: event.target.value })}
+          label= "Titulo"
         />
         <br />
-        <p>Contenido:</p>
         <TextField
           hinttext="Post body"
           floatinglabeltext="Body"
           onChange={(event) => this.setState({ body: event.target.value })}
+          label= "Contenido"
         />
         <br />
         <br />
-        <p>Privado?</p>
+        
         <FormControlLabel
-          value="1"
-          control={
-            <Radio
-              name="privado"
-              value="1"
-              onChange={this.handleChange}
-            />
-          }
+          value="public"
+          control={<Radio
+            checked={this.state.privacy === '0'}
+            onChange={this.handleChange}
+            value="0"
+            name="radio-button-demo"
+          />}
+          label="Public"
         />
+        <FormControlLabel
+          value="private"
+          control={<Radio
+            checked={this.state.privacy === '1'}
+            onChange={this.handleChange}
+            value="1"
+            name="radio-button-demo"
+          />}
+          label="Private"
+        />
+        <FormControlLabel
+          value="followers"
+          control={<Radio
+            checked={this.state.privacy === '2'}
+            onChange={this.handleChange}
+            value="2"
+            name="radio-button-demo"
+          />}
+          label="Followers"
+        />
+        <br />
 
 
         <br />
@@ -124,7 +149,7 @@ class Dashboard extends Component {
     this.dbRefPosts = firebase.database().ref('/posts');
 
     // user-posts
-    this.dbRefUserPosts = firebase.database().ref('/user-posts');
+    //this.dbRefUserPosts = firebase.database().ref('/user-posts');
 
     // other verifications
     var user = firebase.auth().currentUser;
