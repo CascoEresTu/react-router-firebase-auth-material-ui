@@ -27,7 +27,7 @@ class Dashboard extends Component {
       privacy: 0
     };
   }
-  handleChange = event =>{this.setState({privacy: event.target.value})}
+  handleChange = event => { this.setState({ privacy: event.target.value }) }
 
   handleSubmit(event) {
     event.preventDefault();
@@ -54,70 +54,77 @@ class Dashboard extends Component {
 
 
   render() {
-      /*
-        Se crean radio botones para el tipo de post
-      
-      */
+    /*
+      Se crean radio botones para el tipo de post
+    
+    */
+
     return (
-      <form onSubmit={this.handleSubmit.bind(this)} style={style.container}>
-        <h3>NUEVO POST</h3>
-      
-        <TextField
-          hinttext="Post title"
-          floatinglabeltext="Title"
-          onChange={(event) => this.setState({ title: event.target.value })}
-          label= "Titulo"
-        />
-        <br />
-        <TextField
-          hinttext="Post body"
-          floatinglabeltext="Body"
-          onChange={(event) => this.setState({ body: event.target.value })}
-          label= "Contenido"
-        />
-        <br />
-        <br />
-        
-        <FormControlLabel
-          value="public"
-          control={<Radio
-            checked={this.state.privacy === '0'}
-            onChange={this.handleChange}
-            value="0"
-            name="radio-button-demo"
-          />}
-          label="Public"
-        />
-        <FormControlLabel
-          value="private"
-          control={<Radio
-            checked={this.state.privacy === '1'}
-            onChange={this.handleChange}
-            value="1"
-            name="radio-button-demo"
-          />}
-          label="Private"
-        />
-        <FormControlLabel
-          value="followers"
-          control={<Radio
-            checked={this.state.privacy === '2'}
-            onChange={this.handleChange}
-            value="2"
-            name="radio-button-demo"
-          />}
-          label="Followers"
-        />
-        <br />
+      <div style={{width: '300px', height: '150px' ,backgroundColor: "white"}}>
+        <form onSubmit={this.handleSubmit.bind(this)} style={style.container}>
+          <br/>
+          <h3>NUEVO POST</h3>
+
+          <TextField
+            hinttext="Post title"
+            floatinglabeltext="Title"
+            onChange={(event) => this.setState({ title: event.target.value })}
+            label="Titulo"
+          />
+          <br/>
+          <br/>
+          <TextField
+            hinttext="Post body"
+            floatinglabeltext="Body"
+            onChange={(event) => this.setState({ body: event.target.value })}
+            label="Contenido"
+          />
+          <br />
+          <br />
+
+          <FormControlLabel
+            value="public"
+            control={<Radio
+              checked={this.state.privacy === '0'}
+              onChange={this.handleChange}
+              value="0"
+              name="radio-button-demo"
+            />}
+            label="Public"
+          />
+          <br/>
+          <FormControlLabel
+            value="private"
+            control={<Radio
+              checked={this.state.privacy === '1'}
+              onChange={this.handleChange}
+              value="1"
+              name="radio-button-demo"
+            />}
+            label="Private"
+          />
+           <br/>
+          <FormControlLabel
+            value="followers"
+            control={<Radio
+              checked={this.state.privacy === '2'}
+              onChange={this.handleChange}
+              value="2"
+              name="radio-button-demo"
+            />}
+            label="Followers"
+          />
+          <br />
 
 
-        <br />
+          <br />
 
-        <Button
-          style={style.raisedBtn}
-          type="submit"
-        >Submit</ Button>
-      </form>
+          <Button
+            style={style.raisedBtn}
+            type="submit"
+          >Submit</ Button>
+        </form>
+      </div>
     );
   }
 

@@ -19,6 +19,9 @@ class Post extends Component {
         super(props)
         this.LikeHandler = this.LikeHandler.bind(this);
         this.CommentHandler = this.CommentHandler.bind(this);
+        this.FollowerHandler = this.FollowerHandler.bind(this);
+        this.isFollowed = this.isFollowed.bind(this);
+
         this.classes = props.classes;
         this.state = {
             currentUser: props.currentUser,
@@ -29,6 +32,8 @@ class Post extends Component {
             title: props.title,
             body: props.body,
             Likes: props.Likes,
+            followers: {},
+            //following: {},
             comments: {},
             draft: ''
         };
@@ -58,7 +63,7 @@ class Post extends Component {
             // user da like 
             likeContainer[this.state.currentUser.uid] = !this.state.Likes[this.state.currentUser.uid];
         }
-        // update db and state
+        // actualizacion de DB
         updates.Likes = likeContainer;
         dbRef.update(updates);
         this.setState({ Likes: likeContainer });
@@ -77,7 +82,6 @@ class Post extends Component {
     CommentHandler(event) {
         var updatedComments = this.state.comments || {};
 
-
         const newComment = {
             author: this.state.currentUser.username,
             text: this.state.draft,
@@ -90,6 +94,34 @@ class Post extends Component {
             this.setState(updatedComments);
             this.setState({ draft: '' });
         });
+    }
+
+    FollowerHandler(event) {
+        var followsYou = {};
+        var dbRefFollowers = firebase.database().ref('/posts/' + this.state.key);
+
+        if (!this.state.followers) {
+            followsYou[this.state.currentUser.uid] = true;
+        } else if (!(this.state.followers[this.state.currentUser.uid])) {
+            followsYou = this.state.followers;
+            followsYou[this.state.currentUser.uid] = true;
+        } else {
+            followsYou = this.state.followers;
+            followsYou[this.state.currentUser.uid] = !this.state.followers[this.state.currentUser.uid];
+        }
+        dbRefFollowers.update(followsYou);
+        this.setState({ followers: followsYou });
+
+    }
+    isFollowed() {
+        if (this.state.followers
+            && this.state.currentUser.uid in this.state.followers
+            && this.state.followers[this.state.currentUser.uid] === true) {
+
+            return 'Dejar de Seguir';
+        } else {
+            return 'seguir';
+        }
     }
 
     render() {
@@ -120,10 +152,13 @@ class Post extends Component {
                                 <ThumbUpIcon />
                             </IconButton>
                         }
+
                         title={this.state.author}
                         subheader={'Likes: ' + (this.state.Likes ? this.LikeCount() : 0)}
                     />
-                    
+
+
+
 
                     <CardContent>
                         <Typography gutterBottom variant="headline" component="h2">
@@ -132,9 +167,9 @@ class Post extends Component {
                         <Typography component="p">
                             {this.state.body}
                         </Typography>
-                        
-                            {comments}
-                        
+
+                        {comments}
+
                         <Typography component="p">
                             Escribe tu comentario aqui:
                         </Typography>
@@ -150,6 +185,10 @@ class Post extends Component {
                         <Button size="small" color="primary" onClick={this.CommentHandler}>
                             Comentario aqui.
                         </Button>
+
+                        <Button size="small" color="primary" onClick={this.FollowerHandler}>
+                            {this.isFollowed()}
+                        </Button>
                     </CardActions>
                 </Card>
             </div>
@@ -158,33 +197,39 @@ class Post extends Component {
 
 
     componentDidMount() {
-        // posts
+
         this.dbRefPost = firebase.database().ref('/posts/' + this.state.key);
         this.dbCallbackPost = this.dbRefPost.on('value', (snap) => {
             this.setState(snap.val());
         });
 
-        // user-posts
+
         this.dbRefUserPost = firebase.database().ref('/user-posts/' + this.state.key);
         this.dbCallbackUserPost = this.dbRefUserPost.on('value', (snap) => {
             this.setState(snap.val());
         });
 
-        // comments
+
         this.dbRefComments = firebase.database().ref('/comments/' + this.state.key);
         this.dbCallbackComments = this.dbRefComments.on('value', (snap) => {
             this.setState({ comments: snap.val() });
+        });
+
+        this.dbRefFollowers = firebase.database().ref('/followers/' + this.state.uid);
+        this.dbCallbackFollowers = this.dbRefFollowers.on('value', (snap) => {
+            this.setState({ followers: snap.val() });
         });
 
 
     }
 /*
     componentWillUnmount() {
-        // posts
         this.dbRefPost.off('value', this.dbCallbackPost);
-        // users
         this.dbRefUserPost.off('value', this.dbCallbackUserPost);
-    } */
+        this.dbRefFollowers.off('value', this.dbCallbackFollowers);
+        this.dbRefComments.off('value', this.dbCallbackComments);
+
+    }*/
 }
 
 export default Post;

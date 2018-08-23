@@ -1,8 +1,10 @@
-import firebase from '../config/constants';
+import firebase, { firebaseAuth } from '../config/constants';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Post from './Post';
+
+
 
 const styles = {
     card: {
@@ -27,29 +29,63 @@ class Profile extends Component {
         };
     }
 
+
+
+    sortByDate(arr) {
+        return arr.sort((a, b) => {
+            let key1 = a.props.datetime;
+            let key2 = b.props.datetime;
+
+            if (key1 < key2) {
+                return 1;
+            }
+            if (key1 > key2) {
+                return -1;
+            }
+            return 0;
+        });
+    }
+
+
+
     render() {
         var result = [];
+
         if (this.state.posts) {
-            for (let key in this.state.posts) {
-                let post = this.state.posts[key]
-                if (post.uid == firebase.auth().currentUser.uid) {
-                    result.push(<Post
-                        key={key}
-                        classes={this.classes}
-                        author={post.author}
-                        authorPic={post.authorPic}
-                        title={post.title}
-                        body={post.body}
-                        starCount={post.starCount}
-                        privacy={post.privacy}
-                    />);
+            if (firebase.auth().currentUser) {
+                for (let key in this.state.posts) {
+                    let post = this.state.posts[key]
+
+                    if (post.uid = firebase.auth().currentUser.uid) {
+                        result.push(
+                            <div>
+                                <Post
+                                    key={key}
+                                    postid={key}
+                                    currentUser={this.state.currentUser}
+                                    classes={this.classes}
+                                    privacy={post.privacy}
+                                    //author={post.author}
+                                    //authorPic={post.authorPic}
+                                    //title={post.title}
+                                    body={post.body}
+                                    Likes={post.Likes}
+                                    date={post.serverTime}
+
+                                />
+                                <br />
+
+                            </div>
+                        )
+                    }
                 }
             }
-
             return result;
-
+        } else {
+            return (
+                <div>YOU ARE NOT LOGGED IN !</div>
+            );
         }
-        else return result;
 
     }
 
@@ -103,7 +139,22 @@ class Profile extends Component {
         this.dbRefUsers.off('value', this.dbCallbackUsers);
     }
 
-
+    /*
+    <Card>
+      <CardTitle title="Card title" subtitle="Card subtitle" />
+      <CardText>
+        <TextField
+          id = "data"
+          hintText="Hint Text"
+          floatingLabelText="Floating Label Text"
+        />
+      </CardText>
+      <CardActions>
+        <RaisedButton label="Action1" />
+        <RaisedButton label="Action2" primary={true} onClick={() => { this.prueba(); }}/>
+      </CardActions>
+    </Card>
+    */
 }
 
 Profile.propTypes = {

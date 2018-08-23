@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Route, BrowserRouter, Link, Redirect, Switch } from 'react-router-dom';
 import Login from './Login';
-import Register from './Register';
+//import Register from './Register';
 import Home from './Home';
 import Profile from './Profile';
 import Dashboard from './protected/Dashboard';
@@ -14,6 +14,8 @@ import Button from '@material-ui/core/Button';
 import { Toolbar, Typography } from '../../node_modules/@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import red from '@material-ui/core/colors/purple';
+
 
 const styles = {
   root: {
@@ -27,6 +29,8 @@ const styles = {
     marginRight: 20,
   },
 };
+const primary = red['A200']; // #E040FB
+
 
 function PrivateRoute({ component: Component, authed, ...rest }) {
   return (
@@ -61,7 +65,7 @@ function PublicRoute({ component: Component, authed, ...rest }) {
 
 class App extends Component {
   classes = {}
-  constructor(props){
+  constructor(props) {
     super(props);
     //const { classes } = this.props;
     this.classes = this.props.classes;
@@ -90,7 +94,7 @@ class App extends Component {
   componentWillUnmount() {
     this.removeListener();
   }
-    
+
   render() {
     const authButtons = this.state.authed ? (
       <Button
@@ -105,9 +109,6 @@ class App extends Component {
           <Link to="/login">
             <Button style={{ color: '#fff' }} >Login</Button>
           </Link>
-          <Link to="/register">
-            <Button style={{ color: '#fff' }} >Register</Button>
-          </Link>
         </span>
       );
 
@@ -117,61 +118,57 @@ class App extends Component {
           <Button style={{ color: '#fff' }}>Home</Button>
         </Link>
         <Link to="/dashboard">
-          <Button  style={{ color: '#fff' }} >Dashboard</Button>
+          <Button style={{ color: '#fff' }} >Dashboard</Button>
         </Link>
         <Link to="/Profile" color="inherit">
           <Button style={{ color: '#fff' }}>Profile</Button>
         </Link>
-        
+
         {authButtons}
       </div>
     );
     return this.state.loading === true ? (
-      <h1>Loading</h1>
+      <h1>Loading...</h1>
     ) : (
-          <div className={this.classes.root}>
-            
-            <AppBar position="static"  >
-              <Toolbar>
-                <IconButton  className={this.classes.menuButton} color="inherit" aria-label="Menu">
-                  <MenuIcon />
-                </IconButton>
-                <Typography variant="title" color="inherit" className={this.classes.flex}>
-                  aa
+        <div className={this.classes.root}  style={{backgroundColor: 'black'}}>
+
+          <AppBar position="static" style={{ backgroundColor: '#cc0000' }}>
+            <Toolbar>
+              <IconButton className={this.classes.menuButton} color="inherit" aria-label="Menu">
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="title" color="inherit" className={this.classes.flex}>
+                Mi feo Clone de twitter
                   </Typography>
-                  {topbarButtons}    
-              </Toolbar>
-              
-            </AppBar>
-            <br/>
-            <br/>
-            <div className="container-fluid justify-content-center d-flex mt-12">
-              <div >
-                <Switch>
-                  <Route path="/" exact component={Home} />
-                  
-                  <PublicRoute
-                    authed={this.state.authed}
-                    path="/login"
-                    component={Login}
-                  />
-                  <PublicRoute
-                    authed={this.state.authed}
-                    path="/register"
-                    component={Register}
-                  />
-                  <PrivateRoute
-                    authed={this.state.authed}
-                    path="/dashboard"
-                    component={Dashboard}
-                  />
-                  <Route path="/Profile" exact component={Profile} />
-                  <Route render={() => <h3>No aaaa Match</h3>} />
-                </Switch>
-              </div>
+              {topbarButtons}
+            </Toolbar>
+
+          </AppBar>
+          <br />
+          <br />
+          <div className="container-fluid justify-content-center d-flex mt-12">
+            <div >
+              <Switch>
+                <Route path="/" exact component={Home} />
+
+                <PublicRoute
+                  authed={this.state.authed}
+                  path="/login"
+                  component={Login}
+                />
+
+                <PrivateRoute
+                  authed={this.state.authed}
+                  path="/dashboard"
+                  component={Dashboard}
+                />
+                <Route path="/Profile" exact component={Profile} />
+                <Route render={() => <h3>No aaaa Match</h3>} />
+              </Switch>
             </div>
           </div>
-        
+        </div>
+
       );
   }
 }

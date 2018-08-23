@@ -27,6 +27,25 @@ class Home extends Component {
     };
   }
 
+
+
+  sortByDate(arr) {
+    return arr.sort((a, b) => {
+      let key1 = a.props.datetime;
+      let key2 = b.props.datetime;
+
+      if (key1 < key2) {
+        return 1;
+      }
+      if (key1 > key2) {
+        return -1;
+      }
+      return 0;
+    });
+  }
+
+
+
   render() {
     var result = [];
     if (this.state.posts) {
@@ -34,25 +53,35 @@ class Home extends Component {
       for (let key in this.state.posts) {
         let post = this.state.posts[key]
         if (post.privacy == 0) {
-          result.push(<Post
-            key={key}
-            postid={key}
-            currentUser={this.state.currentUser}
-            classes={this.classes}
-            privacy={post.privacy}
-            author={post.author}
-            authorPic={post.authorPic}
-            title={post.title}
-            body={post.body}
-            Likes={post.Likes}
-          />);
+          result.push(
+            <div>
+              <Post
+                key={key}
+                postid={key}
+                currentUser={this.state.currentUser}
+                classes={this.classes}
+                privacy={post.privacy}
+                //author={post.author}
+                //authorPic={post.authorPic}
+                //title={post.title}
+                body={post.body}
+                Likes={post.Likes}
+                date={post.serverTime}
+
+              />
+              <br/>
+
+            </div>
+          );
         }
+
+
       }
 
       return result;
 
-    }else{
-      return  (
+    } else {
+      return (
         <div>Be the first one to post on the dashboard!</div>
       );
     }
